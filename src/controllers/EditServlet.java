@@ -18,7 +18,7 @@ import utils.DBUtil;
  */
 @WebServlet("/edit")
 public class EditServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -28,25 +28,28 @@ public class EditServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	    EntityManager em = DBUtil.createEntityManager();
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        EntityManager em = DBUtil.createEntityManager();
 
-	    Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));
+        Task t = em.find(Task.class, Integer.parseInt(request.getParameter("id")));
 
-	    em.close();
+        em.close();
 
-	    request.setAttribute("task", t);
-	    request.setAttribute("_token", request.getSession().getId());
-	    request.getSession().setAttribute("task_id", t.getId());
+        request.setAttribute("task", t);
+        request.setAttribute("_token", request.getSession().getId());
 
-	    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/edit.jsp");
-	    rd.forward(request,  response);
+        if(t != null) {
+            request.getSession().setAttribute("task_id", t.getId());
+        }
 
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/tasks/edit.jsp");
+        rd.forward(request, response);
 
-	}
+    }
 
 }
